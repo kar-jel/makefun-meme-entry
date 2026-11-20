@@ -5,8 +5,9 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 ROOT = Path(__file__).resolve().parent
 SIZE = 1200
 PINK = (255, 45, 149)
-WHITE = (255, 248, 250)
+WHITE = (255, 255, 255)
 BLACK = (7, 5, 13)
+DISC = (13, 15, 18)
 
 
 def font(size):
@@ -66,22 +67,27 @@ def draw_mascot(image):
     image.paste(glow, (0, 0), glow)
     mark = Image.open(ROOT / "assets" / "mark-1024.png").convert("RGBA")
     mark.thumbnail((400, 400), Image.Resampling.LANCZOS)
-    image.paste(mark, ((SIZE - mark.width) // 2, 280), mark)
+    px = mark.load()
+    for y in range(mark.height):
+        for x in range(mark.width):
+            r, g, b, a = px[x, y]
+            if a and r > 150 and g < 60 and b > 80:
+                px[x, y] = (*DISC, a)
+    image.paste(mark, ((SIZE - mark.width) // 2, 250), mark)
     draw = ImageDraw.Draw(image)
-    centered_text(draw, (600, 705), "make.fun", font(78), PINK)
+    draw.rounded_rectangle((350, 665, 850, 766), radius=12, fill=(0, 0, 0), outline=PINK, width=2)
+    centered_text(draw, (600, 715), "make.fun", font(78), WHITE)
 
 
 def draw_bottom_panel(image):
     draw = ImageDraw.Draw(image)
-    draw.rounded_rectangle((64, 748, 1136, 922), radius=22, fill=(22, 13, 35))
-    centered_text(draw, (600, 788), 'ME: "GTA 6 IS OUT.', font(63), WHITE)
-    centered_text(draw, (600, 860), 'I WAITED 13 YEARS - I EARNED THIS SICK DAY."', font(47), WHITE)
+    draw.rounded_rectangle((64, 780, 1136, 922), radius=22, fill=(22, 13, 35))
+    centered_text(draw, (600, 850), 'ME: "GTA 6 IS OUT. I CALLED IN SICK."', font(57), WHITE)
 
 
 def draw_pitch(image):
     draw = ImageDraw.Draw(image)
     centered_text(draw, (600, 975), "my AI agent earns on make.fun while I play", font(46), WHITE)
-    centered_text(draw, (600, 1035), "people + their agents build things, win bounties, get paid", font(31), WHITE)
 
 
 def main():
