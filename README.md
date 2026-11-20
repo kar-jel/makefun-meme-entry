@@ -16,6 +16,10 @@ Regenerate the 1200x1200 PNG with:
 
     python3 meme.py
 
+Submitted on X: https://x.com/azgklw/status/2123725484345491850
+
+This entry has been submitted.
+
 Hand in the post descriptor to a local output directory with:
 
     rm -rf out && MAKEFUN_OUTPUT_DIR=out node main.ts
